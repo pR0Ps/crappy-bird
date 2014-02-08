@@ -29,6 +29,7 @@ Game = {
 
     //Variables
     score: 0,
+    keydown: false,
     enemies: Array(5), //the enemies to render
     drops: Array(4), //the drops the render
     restartGame: true,
@@ -193,14 +194,21 @@ Game = {
         document.getElementById("game").innerHTML=out;
     },
 
-    keydown: function(){
+    key: function(down){
         return function(e){
             if (e.keyCode == 32){
-                Game.makeDrop();
+                if (down && !Game.keydown){
+                    Game.keydown = true;
+                    Game.makeDrop();
+                }
+                else if (!down){
+                    Game.keydown = false;
+                }
             }
         }
     }
 };
 
 Game._indervalId = setInterval(Game.step, 100);
-document.addEventListener('keydown', Game.keydown());
+document.addEventListener('keydown', Game.key(true));
+document.addEventListener('keyup', Game.key(false));
