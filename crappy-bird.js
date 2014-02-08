@@ -183,7 +183,7 @@ Game = {
         if (Game.state == 0){
             Game.replace(out, ["WELCOME TO CRAPPY BIRD",
                                "",
-                               "PRESS [SPACE] TO START"], 18, 3);
+                               "PRESS [SPACE] TO PLAY"], 18, 3);
         }
         //Game over
         else if (Game.state == 2){
