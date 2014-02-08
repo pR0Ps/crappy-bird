@@ -1,30 +1,30 @@
 Game = {
     //Constants
 
-    DROP_X: 12,
+    DROP_X: 9,
     DROP_START: 2,
     DROP_CHAR: "v",
     SPLAT_CHAR: "_",
     GROUND_Y: 8,
     ENEMY_START: 39,
     ENEMY_CHAR: "X",
-    TEMPLATE: ["                                         ".split(''),
-               "                                         ".split(''),
-               "                                         ".split(''),
-               "               T                         ".split(''),
-               "               |                         ".split(''),
-               "               |                         ".split(''),
-               "               |                         ".split(''),
-               "               |                         ".split(''),
-               "               |                         ".split(''),
-               "⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀".split('')],
+    TEMPLATE: ["                                         ",
+               "                                         ",
+               "                                         ",
+               "            T                            ",
+               "            |                            ",
+               "            |                            ",
+               "            |                            ",
+               "            |                            ",
+               "            |                            ",
+               "⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀⁀"],
     BIRD: ["    _ ",
            "   ('>",
            " \\==_)"],
     BIRD_FLAP: ["    _ ",
                 "   (9>",
                 "\\==__)"],
-    BIRD_X: 12,
+    BIRD_X: 9,
     BIRD_Y: 0,
 
     //Variables
@@ -153,8 +153,9 @@ Game = {
     render: function() {
         var out = [];
 
+        //Get a character array of the template
         for (var i = 0 ; i < Game.TEMPLATE.length ; i++) {
-            out.push(Game.TEMPLATE[i].slice(0));
+            out.push(Game.TEMPLATE[i].split(''));
         }
 
         //Render score
