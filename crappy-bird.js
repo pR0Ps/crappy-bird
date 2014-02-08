@@ -123,7 +123,6 @@ Game = {
             for (var d = 0 ; d < Game.drops.length ; d++){
                 if (Game.drops[d] == Game.GROUND_Y &&
                         Math.abs(Game.enemies[e] - Game.DROP_X) <= 1){
-                    console.log("splat");
                     Game.drops[d] = -1;
                     Game.enemies[e] = -1;
                     Game.score++;
@@ -134,6 +133,9 @@ Game = {
 
     replace: function(orig, obj, x, y){
         //Modify put obj into orig at the x,y coords
+        if (!(obj instanceof Array))
+            obj = [obj];
+
         if (y < 0 || x < 0 ||
                 orig.length == 0 || orig[0].length == 0 ||
                 obj.length == 0 || obj[0].length == 0 ||
@@ -154,6 +156,9 @@ Game = {
         for (var i = 0 ; i < Game.TEMPLATE.length ; i++) {
             out.push(Game.TEMPLATE[i].slice(0));
         }
+
+        //Render score
+        Game.replace(out, "SCORE: " + Game.score, 30, 2)
 
         //Render bird
         if (Game.flapping){
