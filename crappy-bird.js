@@ -188,7 +188,7 @@ Game = {
         //Game over
         else if (Game.state == 2){
             Game.replace(out, ["       GAME  OVER       ",
-                               "   YOUR SCORE WAS " + Game. score,
+                               "   YOUR SCORE WAS " + Game.score,
                                "",
                                "PRESS [SPACE] TO RESTART"], 16, 3);
         }
