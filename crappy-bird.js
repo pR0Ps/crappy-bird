@@ -248,6 +248,7 @@ Game = {
             else if (!down){
                 Game.keydown = false;
             }
+            e.preventDefault();
         }
     }
 };
