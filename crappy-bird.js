@@ -7,6 +7,7 @@ Game = {
     SPLAT_CHAR: "_",
     GROUND_Y: 8,
     ENEMY_START: 39,
+    ENEMY_SPAWN_RATE: 0.1,
     ENEMY_CHAR: "X",
     TEMPLATE: ["                                         ",
                "                                         ",
@@ -27,9 +28,13 @@ Game = {
     BIRD_X: 9,
     BIRD_Y: 0,
 
+    STATE_START: 0,
+    STATE_GAME: 1,
+    STATE_END: 2,
+
     //Variables
     score: 0,
-    state: 0, //0=start, 1=game, 2=end
+    state: 0,
     lives: 0,
     keydown: false,
     enemies: Array(5),
@@ -40,7 +45,7 @@ Game = {
         //Setup a new game
         Game.score = 0;
         Game.lives = 5;
-        Game.state = 1;
+        Game.state = Game.STATE_GAME;
         for (var i = 0 ; i < Game.enemies.length ; i++)
             Game.enemies[i] = -1;
         for (var i = 0 ; i < Game.drops.length ; i++)
@@ -50,17 +55,17 @@ Game = {
 
     step: function(){
         //Run this every step
-        if (Game.state == 1){
-            if (Math.random() < 0.1){
+        if (Game.state == Game.STATE_GAME){
+            if (Math.random() < Game.ENEMY_SPAWN_RATE){
                 Game.makeEnemy();
             }
             Game.moveDrops();
             Game.moveEnemies();
             Game.checkCollision();
 
-            //After doing collisions, check player still alive
             if (Game.lives < 1){
-                Game.state = 2;
+                // Game over
+                Game.state = Game.STATE_END;
             }
         }
         Game.render();
@@ -69,7 +74,7 @@ Game = {
     makeDrop: function(){
         var idx = -1;
         //If no drops are in the start position and there is a
-        //drop available set it's position to the start position
+        //drop available, set it's position to the start position
         for (var i = 0 ; i < Game.drops.length ; i++){
             if (Game.drops[i] == Game.DROP_START){
                 //Already dropping, dont do it again
@@ -93,7 +98,6 @@ Game = {
                 Game.drops[i] = -1;
             }
             else if (Game.drops[i] >= 0){
-                //Add 1 to drops position
                 Game.drops[i]++;
             }
         }
@@ -143,7 +147,7 @@ Game = {
     replace: function(orig, obj, x, y){
         //Put obj into orig at the x,y coords
 
-        //Make a single line reder properly
+        //Make a single line render properly
         if (!(obj instanceof Array))
             obj = [obj];
 
@@ -180,20 +184,20 @@ Game = {
         }
 
         //Start game
-        if (Game.state == 0){
+        if (Game.state == Game.STATE_START){
             Game.replace(out, ["WELCOME TO CRAPPY BIRD",
                                "",
                                "PRESS [SPACE] TO PLAY"], 18, 3);
         }
         //Game over
-        else if (Game.state == 2){
+        else if (Game.state == Game.STATE_END){
             Game.replace(out, ["       GAME  OVER       ",
                                "   YOUR SCORE WAS " + Game.score,
                                "",
                                "PRESS [SPACE] TO RESTART"], 16, 3);
         }
         //Gameplay
-        else if (Game.state == 1){
+        else if (Game.state == Game.STATE_GAME){
             //Render score and lives
             Game.replace(out, ["SCORE: " + Game.score,
                                "LIVES: " + Game.lives], 30, 2)
@@ -237,11 +241,12 @@ Game = {
             if (e.keyCode != 32) return;
 
             if (down && !Game.keydown){
+                // Game state machine
                 Game.keydown = true;
-                if (Game.state == 0 || Game.state == 2){
+                if (Game.state == Game.STATE_START || Game.state == Game.STATE_END){
                     Game.newGame();
                 }
-                else if (Game.state == 1){
+                else if (Game.state == Game.STATE_GAME){
                     Game.makeDrop();
                 }
             }
